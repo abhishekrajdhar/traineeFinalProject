@@ -40,6 +40,15 @@ def index():
         return render_template('index.html', recommendations=recommendations.to_dict(orient='records'),truncate = truncate)
     return render_template('index.html', recommendations=[])
 
+@app.route('/api/recommend', methods=['POST'])
+def recommend_api():
+    data = request.get_json()
+    ingredients = data.get('ingredients', '')
+    input_features = [ingredients]
+    recommendations = recommend_recipes(input_features)
+    return recommendations.to_json(orient='records')
+
+
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 10000))
