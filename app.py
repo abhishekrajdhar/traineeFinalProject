@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request
 import numpy as np
 import pandas as pd
+from flask_cors import CORS
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 app = Flask(__name__)
+CORS(app)
 
 
 df = pd.read_csv("recipe.csv")
@@ -39,4 +41,6 @@ def index():
     return render_template('index.html', recommendations=[])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
